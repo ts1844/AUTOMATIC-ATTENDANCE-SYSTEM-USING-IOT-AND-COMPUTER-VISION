@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <h1>MQTT Image Receiver</h1>
+    <table id="imageTable">
+        <tr>
+            <th>Timestamp</th>
+            <th>Image</th>
+        </tr>
+    </table>
+    <script>
+        // Create a client instance with a random client ID
+        var clientId = "clientId_" + Math.random().toString(16).substr(2, 8);
+        var client = new Paho.MQTT.Client("broker.hivemq.com", 8000, clientId);
+
+        // Set callback handlers
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+
+        // Connect the client
+        client.connect({onSuccess:onConnect});
+
+        // Called when the client connects
+        function onConnect() {
+            console.log("Connected to broker");
+            client.subscribe("Recognized_faces");
+        }
+
+        // Called when the client loses its connection
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("Connection Lost: "+responseObject.errorMessage);
+            }
+        }
+
+        // Called when a message arrives
+        function onMessageArrived(message) {
+            console.log("Message Arrived: "+message.payloadString);
+            var table = document.getElementById('imageTable');
+            var row = table.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = new Date().toLocaleString();
+            var img = document.createElement('img');
+            img.src = 'data:image/jpeg;base64,' + message.payloadString;
+            cell2.appendChild(img);
+        }
+    </script>
+</body>
+</html>
