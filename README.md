@@ -43,10 +43,9 @@ The project was successfully presented at:
 
 ## 📁 Folder Structure
 
-├── src/ # Python scripts (registration, training, recognition)
-├── model/ # Trained model (trainer.yml)
-├── dataset/ # Collected facial image samples
-├── web/ # Web interface files
+├── src/ # Python scripts (Dataset.py, Data_trainer.py, Face_Recognizer.py)
+├── Images and Results
+├── web/ # Web interface files(Reciever_table.html)
 ├── requirements.txt # Python package dependencies
 ├── README.md # Project overview
 ├── LICENSE # MIT License (Open Source)
